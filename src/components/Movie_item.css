@@ -1,0 +1,9 @@
+img{
+	width: 50%;
+}
+
+.info_button1{
+	width: 35%;
+	margin-left: 1%;
+	box-shadow: 2px 2px 5px darkgrey;
+}
