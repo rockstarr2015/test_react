@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Movies from './components/Movies';
 import './App.css';
+import $ from 'jquery';
 
 class App extends Component {
 
@@ -28,51 +29,75 @@ class App extends Component {
 
   }
 
+  getMovie(){
+
+     $.ajax({
+      url: 'http://localhost:4000/getMovies',
+      dataType: 'json',
+      method: 'GET',
+      success : function(data){
+        this.setState({movies: data})
+      }.bind(this)
+
+     })
+  }
 
   componentWillMount(){
-      this.setState({
-         movies : [
-              {
-                movie_name: 'The Godfather',
-                movie_director: 'Francis Ford Coppola',
-                movie_year: 1972,
-                movie_genere: 'Crime, Drama',
-                movie_image: 'https://image.ibb.co/jeAAOc/godfather1.jpg'
-              },
-               {
-                movie_name: 'The Godfather1',
-                movie_director: 'Francis Ford Coppola',
-                movie_year: 1972,
-                movie_genere: 'Crime, Drama',
-                movie_image: 'https://image.ibb.co/jeAAOc/godfather1.jpg'
-              },
-               {
-                movie_name: 'The Godfather2',
-                movie_director: 'Francis Ford Coppola',
-                movie_year: 1972,
-                movie_genere: 'Crime, Drama',
-                movie_image: 'https://image.ibb.co/jeAAOc/godfather1.jpg'
-              },
-               {
-                movie_name: 'The Godfather3',
-                movie_director: 'Francis Ford Coppola',
-                movie_year: 1972,
-                movie_genere: 'Crime, Drama',
-                movie_image: 'https://image.ibb.co/jeAAOc/godfather1.jpg'
-              }
+    //get data from API
+    this.getMovie();
+      
+  }
 
-          ]
-      });
-    }
+
+  componentDidMount(){
+    //get data from API
+    this.getMovie();
+  }
+
+  editMovie4(editedMovie){
+    //update the state;
+    let movie_name = editedMovie.movie_name;
+    let currentState = this.state.movies;
+    //remove the old record
+    let index = currentState.findIndex(x => x.movie_name === editedMovie.movie_name);
+    currentState.splice(index,1);
+
+    //update the state
+    this.setState({movies: [...currentState, editedMovie]})
+
+  }
+
+  deleteMovie4(name){
+    let currentState = this.state.movies;
+    //remove the old movie record
+    let index = currentState.findIndex(x=> x.movie_name === name);
+    currentState.splice(index,1);
+
+    //update the state
+    this.setState({movies:[...currentState]});
+  }
+
+  //still working on update record in database 
+  handleSaveChange(event){
+    event.preventDefault();
+    let currentState = this.state.movies;
+    currentState.forEach((movie)=>{
+
+    })
+    //call update router to update records 
+
+  }
 
 
   render() {
     return (
       <div className="App well">
           
-          <Movies movie_data={this.state.movies} />
-          <button className="btn btn-primary add_movie" data-toggle="modal" data-target="#myModal"> Add Movie</button>
-
+          <Movies editMovie3={this.editMovie4.bind(this)} 
+            deleteMovie3={this.deleteMovie4.bind(this)}
+            movie_data={this.state.movies} />
+          
+          
           <div id="myModal" className="modal fade" role="dialog">
             <div className="modal-dialog">
 
@@ -115,12 +140,11 @@ class App extends Component {
             </div>
           </div>
 
-
-
-
-
-
-
+          <button  className="btn btn-primary add_movie" data-toggle="modal" data-target="#myModal"> Add Movie</button>
+          
+          
+          <button className="btn btn-primary" onClick={this.handleSaveChange.bind(this)}>Save Changes</button>
+          
 
 
       </div>

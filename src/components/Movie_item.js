@@ -20,6 +20,16 @@ class Movie_item extends Component {
 
 	}
 
+	editMovie(editedMovie){
+		this.props.editMovie1(editedMovie);
+	}
+
+	deleteMovie(name){
+		this.props.deleteMovie1(name);
+	}
+
+	
+
   render() {
     
     return (
@@ -28,10 +38,8 @@ class Movie_item extends Component {
         	<b>{this.props.movie_data.movie_name}</b>
         </button>
 
-        {this.state.isToggled ? <ShowInfo movie_info={this.props.movie_data} /> : null}
-
-        
-      
+        {this.state.isToggled ? <ShowInfo onEdit={this.editMovie.bind(this)}
+         movie_info={this.props.movie_data}  onDelete={this.deleteMovie.bind(this)}/> : null}
         <br />
   
       </div>
